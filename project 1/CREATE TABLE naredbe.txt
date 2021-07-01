@@ -1,0 +1,125 @@
+CREATE TABLE MODNA_REVIJA(
+rbr         integer,
+naziv         varchar(15),
+mesto         varchar(15),
+datum         date,
+vreme         TIMESTAMP
+);
+
+ALTER TABLE MODNA_REVIJA ADD PRIMARY KEY(rbr);
+
+CREATE TABLE UCESNIK(
+ime         varchar(15),
+prezime         varchar(15),
+pol         varchar(15),
+matbr         integer,
+datum_rodjenja         date
+);
+
+ALTER TABLE UCESNIK ADD PRIMARY KEY(matbr);
+
+CREATE TABLE MODNI_KREATOR(
+zemlja         varchar(15),
+matbr         integer
+);
+
+ALTER TABLE MODNI_KREATOR ADD PRIMARY KEY(matbr);
+
+ALTER TABLE MODNI_KREATOR ADD CONSTRAINT matbr_FK FOREIGN KEY(matbr) REFERENCES UCESNIK(matbr);
+
+CREATE TABLE MANEKEN(
+boja_ociju         varchar(15),
+boja_kose         varchar(15),
+konfbr         decimal(10,5),
+visina         decimal(10,5),
+tezina         decimal(10,5),
+matbr         integer
+);
+
+ALTER TABLE MANEKEN ADD PRIMARY KEY(matbr);
+
+ALTER TABLE MANEKEN ADD CONSTRAINT matbr_FK FOREIGN KEY(matbr) REFERENCES UCESNIK(matbr);
+
+CREATE TABLE MODNA_AGENCIJA(
+pib         integer,
+naziv_agencije         varchar(15),
+sediste         varchar(15),
+datum_osnivanja         date
+);
+
+ALTER TABLE MODNA_AGENCIJA ADD PRIMARY KEY(pib);
+
+CREATE TABLE INTERNACIONALNA(
+pib         integer
+);
+
+ALTER TABLE INTERNACIONALNA ADD PRIMARY KEY(pib);
+
+ALTER TABLE INTERNACIONALNA ADD CONSTRAINT pib_FK FOREIGN KEY(pib) REFERENCES MODNA_AGENCIJA(pib);
+
+CREATE TABLE SPEC_GOST(
+ime_gosta         varchar(15),
+prezime_gosta         varchar(15),
+zanimanje         varchar(15),
+rbr         integer
+);
+
+ALTER TABLE SPEC_GOST ADD PRIMARY KEY(zanimanje , rbr);
+
+ALTER TABLE SPEC_GOST ADD CONSTRAINT rbr_FK FOREIGN KEY(rbr) REFERENCES MODNA_REVIJA(rbr);
+
+CREATE TABLE PREDSTAVLJA(
+matbr0         integer,
+rbr1         integer,
+kolaborirali         varchar(15)
+);
+
+ALTER TABLE PREDSTAVLJA ADD PRIMARY KEY(matbr0 , rbr1);
+
+ALTER TABLE PREDSTAVLJA ADD CONSTRAINT matbr0_FK FOREIGN KEY(matbr0) REFERENCES MODNI_KREATOR(matbr);
+
+ALTER TABLE PREDSTAVLJA ADD CONSTRAINT rbr1_FK FOREIGN KEY(rbr1) REFERENCES MODNA_REVIJA(rbr);
+
+CREATE TABLE NASTUPA(
+matbr0         integer,
+rbr1         integer
+);
+
+ALTER TABLE NASTUPA ADD PRIMARY KEY(matbr0 , rbr1);
+
+ALTER TABLE NASTUPA ADD CONSTRAINT matbr0_FK FOREIGN KEY(matbr0) REFERENCES MANEKEN(matbr);
+
+ALTER TABLE NASTUPA ADD CONSTRAINT rbr1_FK FOREIGN KEY(rbr1) REFERENCES MODNA_REVIJA(rbr);
+
+CREATE TABLE PRIPADA(
+matbr0         integer,
+pib1         integer
+);
+
+ALTER TABLE PRIPADA ADD PRIMARY KEY(matbr0 , pib1);
+
+ALTER TABLE PRIPADA ADD CONSTRAINT matbr0_FK FOREIGN KEY(matbr0) REFERENCES MANEKEN(matbr);
+
+ALTER TABLE PRIPADA ADD CONSTRAINT pib1_FK FOREIGN KEY(pib1) REFERENCES MODNA_AGENCIJA(pib);
+
+CREATE TABLE kuce(
+kuce         varchar(15),
+matbr         integer
+);
+
+ALTER TABLE kuce ADD PRIMARY KEY(kuce , matbr);
+
+CREATE TABLE casopisi(
+casopisi         varchar(15),
+matbr         integer
+);
+
+ALTER TABLE casopisi ADD PRIMARY KEY(casopisi , matbr);
+
+CREATE TABLE zemlje(
+zemlje         varchar(15),
+pib         integer
+);
+
+ALTER TABLE zemlje ADD PRIMARY KEY(zemlje , pib);
+
